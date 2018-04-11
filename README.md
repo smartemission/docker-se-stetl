@@ -20,6 +20,8 @@ in the Stetl Framework and are available under the Python [smartem](smartem) pac
 All ETL processes are invoked using the same [SE Stetl Docker image](Dockerfile).
 They can be scheduled via Kubernetes or `cron`.
 
+The Docker Image is hosted as: [smartemission/se-stetl at DockerHub](https://hub.docker.com/r/smartemission/se-stetl/).
+
 The main ETL is multi-step as follows.
 
 ## Step 1: Harvesters - Fetching raw sensor data
