@@ -99,10 +99,10 @@ The convention is to use `stetl_` names for variable names in the [config files]
 For example `pg_database` within [last.cfg](config/last.cfg) becomes `stetl_pg_database` within
 a K8s or other Docker deployment.
 
-## ETL process: Last (Values)
+## ETL process: (Harvester) Last (Values)
 
-The following environment vars need to be set, either via `docker-compose` or
-Kubernetes.
+Config file: [last.cfg](config/last.cfg). 
+The following environment vars need to be set, either via `docker-compose` or Kubernetes.
 
 |Environment variable|
 |---|
@@ -115,3 +115,48 @@ Kubernetes.
 |stetl_pg_password|
 |stetl_pg_schema_rt|
 |stetl_pg_schema_calibrated|
+
+## ETL process: Harvester Whale
+
+Config file: [harvester_whale.cfg](harvester_whale.cfg). 
+The following environment vars need to be set, either via `docker-compose` or
+Kubernetes.
+
+|Environment variable|
+|---|
+|stetl_raw_device_url_1|
+|stetl_raw_device_url_2|
+|stetl_intemo_token|
+|stetl_pg_host|
+|stetl_pg_database|
+|stetl_pg_user|
+|stetl_pg_password|
+|stetl_pg_schema_raw|
+|stetl_max_proc_time_secs|
+|stetl_api_interval_secs|
+
+## ETL process: Refiner
+
+Config file: [refiner.cfg](refiner.cfg). 
+The following environment vars need to be set, either via `docker-compose` or
+Kubernetes.
+
+|Environment variable|
+|---|
+|stetl_refiner_max_input_records|
+|stetl_refiner_raw_read_once|
+|stetl_intemo_token|
+|stetl_pg_host|
+|stetl_pg_database|
+|stetl_pg_user|
+|stetl_pg_password|
+|stetl_pg_schema_raw|
+|stetl_pg_schema_refined|
+|stetl_pg_schema_calibrated|
+|stetl_influx_host|
+|stetl_influx_port|
+|stetl_influx_host|
+|stetl_influx_se_database|
+|stetl_influx_se_measurement_refined|
+|stetl_influx_se_writer|
+|stetl_influx_se_writer_password|
