@@ -145,7 +145,6 @@ Kubernetes.
 |---|
 |stetl_refiner_max_input_records|
 |stetl_refiner_raw_read_once|
-|stetl_intemo_token|
 |stetl_pg_host|
 |stetl_pg_database|
 |stetl_pg_user|
