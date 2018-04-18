@@ -6,8 +6,9 @@ LABEL maintainer="Just van den Broecke <justb4@gmail.com>"
 ENV ADD_PYTHON_DEB_PACKAGES="python-dev python-scipy python-seaborn python-matplotlib"  \
 	ADD_PYTHON_PIP_PACKAGES="wheel Geohash influxdb scikit-learn==0.18"
 
-RUN pip install --upgrade pip \
-	&& apt-get update && apt-get --no-install-recommends install  -y \
+# Not now see: https://github.com/pypa/pip/issues/5240
+# RUN pip install --upgrade pip
+RUN apt-get update && apt-get --no-install-recommends install  -y \
 	     ${ADD_PYTHON_DEB_PACKAGES} \
 	    
 	&& pip install ${ADD_PYTHON_PIP_PACKAGES} \
