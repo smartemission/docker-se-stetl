@@ -177,7 +177,6 @@ Kubernetes.
 |stetl_pg_schema_calibrated|
 |stetl_stapublisher_max_input_records|
 |stetl_sta_host|
-|stetl_influx_host|
 |stetl_sta_port|
 |stetl_sta_path|
 |stetl_sta_user|
