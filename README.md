@@ -174,7 +174,6 @@ Kubernetes.
 |stetl_pg_password|
 |stetl_pg_schema_raw|
 |stetl_pg_schema_refined|
-|stetl_pg_schema_calibrated|
 |stetl_stapublisher_max_input_records|
 |stetl_sta_host|
 |stetl_sta_port|
