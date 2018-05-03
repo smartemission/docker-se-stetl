@@ -187,7 +187,7 @@ class HarvesterInfluxDbInput(InfluxDbInput):
                 day_last = ymd_last[6:]
                 hour_last = progress_rec[5]
                 # e.g. 2017-11-17T11:00:00.411Z
-                date_str = '%s-%s-%sT%d:00:00.000Z' % (year_last, month_last, day_last, hour_last)
+                date_str = '%s-%s-%sT%d:00:00.000Z' % (year_last, month_last, day_last, hour_last-1)
                 current_ts = self.date_str_to_whole_hour_nanos(date_str)
                 # skip to next hour
                 # current_ts += (3600 * NANOS_FACTOR)
