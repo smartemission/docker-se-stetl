@@ -1,5 +1,5 @@
 {{
   "name": "{name}",
-  "definition": "https://github.com/Geonovum/smartemission/blob/master/etl/smartem/devices",
+  "definition": "https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices",
   "description": "{name} in {unit}"
 }}

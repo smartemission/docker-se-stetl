@@ -118,7 +118,7 @@ The following environment vars need to be set, either via `docker-compose` or Ku
 
 ## ETL process: Harvester Whale
 
-Config file: [harvester_whale.cfg](harvester_whale.cfg). 
+Config file: [harvester_whale.cfg](config/harvester_whale.cfg). 
 The following environment vars need to be set, either via `docker-compose` or
 Kubernetes.
 
@@ -137,7 +137,7 @@ Kubernetes.
 
 ## ETL process: Refiner
 
-Config file: [refiner.cfg](refiner.cfg). 
+Config file: [refiner.cfg](config/refiner.cfg). 
 The following environment vars need to be set, either via `docker-compose` or
 Kubernetes.
 
@@ -162,7 +162,7 @@ Kubernetes.
 
 ## ETL process: STA Publisher
 
-Config file: [stapublisher.cfg](stapublisher.cfg). 
+Config file: [stapublisher.cfg](config/stapublisher.cfg). 
 The following environment vars need to be set, either via `docker-compose` or
 Kubernetes.
 
@@ -179,3 +179,27 @@ Kubernetes.
 |stetl_sta_path|
 |stetl_sta_user|
 |stetl_sta_password|
+
+## ETL process: RIVM (SOS) Harvester
+
+Config file: [harvester_rivm.cfg](config/harvester_rivm.cfg). 
+The following environment vars need to be set, either via `docker-compose` or
+Kubernetes.
+
+|Environment variable|
+|---|
+|stetl_rivm_sos_base_url|
+|stetl_max_proc_time_secs|
+|stetl_api_interval_secs|
+|stetl_pg_host|
+|stetl_pg_database|
+|stetl_pg_user|
+|stetl_pg_password|
+|stetl_pg_schema_raw|
+|stetl_pg_schema_harvest_rivm|
+|stetl_influx_host|
+|stetl_influx_port|
+|stetl_influx_se_database|
+|stetl_influx_se_measurement_rivm|
+|stetl_influx_se_writer|
+|stetl_influx_se_writer_password|
