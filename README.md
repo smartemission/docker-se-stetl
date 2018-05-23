@@ -135,6 +135,50 @@ Kubernetes.
 |stetl_max_proc_time_secs|
 |stetl_api_interval_secs|
 
+# ETL process: RIVM (SOS) Harvester
+
+Config file: [harvester_rivm.cfg](config/harvester_rivm.cfg). 
+The following environment vars need to be set, either via `docker-compose` or
+Kubernetes.
+
+|Environment variable|
+|---|
+|stetl_rivm_sos_base_url|
+|stetl_max_proc_time_secs|
+|stetl_api_interval_secs|
+|stetl_pg_host|
+|stetl_pg_database|
+|stetl_pg_user|
+|stetl_pg_password|
+|stetl_pg_schema_raw|
+|stetl_pg_schema_harvest_rivm|
+|stetl_influx_host|
+|stetl_influx_port|
+|stetl_influx_se_database|
+|stetl_influx_se_measurement_rivm|
+|stetl_influx_se_writer|
+|stetl_influx_se_writer_password|
+
+## ETL process: InfluxDB Harvester
+
+Config file: [harvester_influx.cfg](config/harvester_influx.cfg). 
+The following environment vars need to be set, either via `docker-compose` or
+Kubernetes.
+
+|Environment variable|
+|---|
+|stetl_influx_host|
+|stetl_influx_port|
+|stetl_influx_as_database|
+|stetl_influx_as_reader|
+|stetl_influx_as_reader_password|
+|stetl_max_proc_time_secs|
+|stetl_pg_host|
+|stetl_pg_database|
+|stetl_pg_user|
+|stetl_pg_password|
+|stetl_pg_schema_raw|
+
 ## ETL process: Refiner
 
 Config file: [refiner.cfg](config/refiner.cfg). 
@@ -154,7 +198,6 @@ Kubernetes.
 |stetl_pg_schema_calibrated|
 |stetl_influx_host|
 |stetl_influx_port|
-|stetl_influx_host|
 |stetl_influx_se_database|
 |stetl_influx_se_measurement_refined|
 |stetl_influx_se_writer|
@@ -180,26 +223,44 @@ Kubernetes.
 |stetl_sta_user|
 |stetl_sta_password|
 
-## ETL process: RIVM (SOS) Harvester
+## ETL process: SOS Publisher
 
-Config file: [harvester_rivm.cfg](config/harvester_rivm.cfg). 
+Config file: [sospublisher.cfg](config/sospublisher.cfg). 
 The following environment vars need to be set, either via `docker-compose` or
 Kubernetes.
 
 |Environment variable|
 |---|
-|stetl_rivm_sos_base_url|
-|stetl_max_proc_time_secs|
-|stetl_api_interval_secs|
+|stetl_pg_host|
+|stetl_pg_database|
+|stetl_pg_user|
+|stetl_pg_password|
+|stetl_pg_schema_refined|
+|stetl_sospublisher_max_input_records|
+|stetl_sos_host|
+|stetl_sos_port|
+|stetl_sos_path|
+
+## ETL process: Extractor
+
+Config file: [extractor.cfg](config/extractor.cfg). 
+The following environment vars need to be set, either via `docker-compose` or
+Kubernetes.
+
+|Environment variable|
+|---|
+|stetl_extractor_max_input_records|
+|stetl_extractor_raw_read_once|
 |stetl_pg_host|
 |stetl_pg_database|
 |stetl_pg_user|
 |stetl_pg_password|
 |stetl_pg_schema_raw|
-|stetl_pg_schema_harvest_rivm|
+|stetl_pg_schema_refined|
+|stetl_pg_schema_extracted|
 |stetl_influx_host|
 |stetl_influx_port|
 |stetl_influx_se_database|
-|stetl_influx_se_measurement_rivm|
+|stetl_influx_se_measurement_extract|
 |stetl_influx_se_writer|
 |stetl_influx_se_writer_password|
