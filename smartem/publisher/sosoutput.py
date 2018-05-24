@@ -95,16 +95,15 @@ class SOSTOutput(HttpOutput):
         # statuscode, statusmessage, res = HttpOutput.post(self, packet, insert_sensor_payload)
         # return statuscode, statusmessage, res
 
-        log.info('====START InsertObservation id=%s' % id)
-        log.info('POSTing InsertObservation! try 1 - payload=%s' % payload)
+        log.info('===START - POSTing InsertObservation! try 1 - id = %s', id)
         statuscode, statusmessage, res = HttpOutput.post(self, packet, payload)
 
         # InsertObservation may fail when Sensor not in SOS
         # Try to do an InsertSensor and try InsertObservation again
         if statuscode == 400:
-            log.info('No sensor for station: res=%s, will insert' % res)
+            log.info('No sensor for station: will insert')
             insert_sensor_payload = self.create_insert_sensor_payload(packet)
-            log.info('POSTing InsertSensor! - payload=%s' % insert_sensor_payload)
+            log.info('POSTing InsertSensor!')
             statuscode, statusmessage, res = HttpOutput.post(self, packet, insert_sensor_payload)
             if statuscode != 200:
                 log.warn('FAIL InsertSensor for station: rec=%s res=%s' % (str(packet.data), res))
@@ -114,7 +113,7 @@ class SOSTOutput(HttpOutput):
                 if statuscode == 200:
                     log.info('YES InsertObservation! try 2 OK!! %s' % id)
                 else:
-                    log.warn('FAIL InsertObservation payload=%s res=%s' % (payload, res))
+                    log.warn('FAIL InsertObservation res=%s' % res)
         elif statuscode == 200:
             log.info('YES inserted Observation! try 1 id=%s' % id)
 
@@ -125,7 +124,7 @@ class SOSTOutput(HttpOutput):
         #     log.info('OK UpdateSensorDescription for station: rec=%s res=%s' % (str(packet.data), res))
         # else:
         #     log.warn('FAIL UpdateSensorDescription for station: rec=%s res=%s' % (str(packet.data), res))
-        log.info('====END InsertObservation id=%s' % id)
+        log.info('====END - InsertObservation id=%s' % id)
 
         return statuscode, statusmessage, res
 
