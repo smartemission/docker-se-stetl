@@ -139,11 +139,12 @@ class Refiner:
                     input_name = sensor_def['input']
                     input_valid, reason = self.device.check_value(input_name, sensor_vals)
                     if not input_valid:
-                        # Only log warning once first time
-                        if not self.has_err_msg(device_id, reason):
+                        # Only log warning once first time (split off value details from 'reason' msg)
+                        reason_msg = reason.split(':')[0]
+                        if not self.has_err_msg(device_id, reason_msg):
                             log.warn('id=%d-%d-%d-%s meta=%s gid_raw=%d: invalid input for %s: detail=%s' % (
                                device_id, day, hour, sensor_name, device_meta, gid_raw, str(input_name), reason))
-                            self.add_err_msg(device_id, reason)
+                            self.add_err_msg(device_id, reason_msg)
                         validate_errs += 1
                         continue
 
@@ -260,10 +261,12 @@ class Refiner:
                     value = sensor_def['converter'](value_raw, sensor_vals, sensor_def, self.device)
                     output_valid, reason = self.device.check_value(sensor_name, sensor_vals, value=value)
                     if not output_valid:
-                        if not self.has_err_msg(device_id, reason):
+                        reason_msg = reason.split(':')[0]
+                        if not self.has_err_msg(device_id, reason_msg):
+                            # Only log warning once first time (split off value details from 'reason' msg)
                             log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
                                 device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
-                            self.add_err_msg(device_id, reason)
+                            self.add_err_msg(device_id, reason_msg)
                         validate_errs += 1
                         continue
 
