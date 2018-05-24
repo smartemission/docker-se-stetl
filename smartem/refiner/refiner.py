@@ -20,7 +20,10 @@ log = logging.getLogger('Refiner')
 class Refiner:
     # Refiner instance is Singleton: one per process.
     refiners = {}
-    
+
+    # Gather error messages to avoid excess logging for same reason
+    error_msgs = {}
+
     def __init__(self, device):
         self.device = device
         self.config_dict = None
@@ -72,6 +75,12 @@ class Refiner:
         # Standard moving avg.
         return float(moving_avg) + (float(x) - float(moving_avg)) / float(n)
 
+    def add_err_msg(self, device_id, reason):
+        self.error_msgs['%d-%s' % (device_id, reason)] = reason
+
+    def has_err_msg(self, device_id, reason):
+        return '%d-%s' % (device_id, reason) in self.error_msgs
+
     def refine(self, record_in, sensor_names):
         # Start dict of output records, key is sensor name, value is a record
         records_out = dict()
@@ -113,8 +122,12 @@ class Refiner:
                         continue
 
                     if 'input' not in sensor_def or 'converter' not in sensor_def:
-                        log.warn('No input or converter defined for %s device_meta=%s dev_id=%s' %
-                                                         (sensor_name, device_meta, str(device_id)))
+                        # Only log warning once first time
+                        reason = 'No input or converter defined for %s' % sensor_name
+                        if not self.has_err_msg(device_id, reason):
+                            log.warn('%s device_meta=%s dev_id=%s' %
+                                                             (reason, device_meta, str(device_id)))
+                            self.add_err_msg(device_id, reason)
                         continue
 
                     # In some cases the sensor_vals are unrelated to the sensor_name (mainly ASE)
@@ -126,8 +139,11 @@ class Refiner:
                     input_name = sensor_def['input']
                     input_valid, reason = self.device.check_value(input_name, sensor_vals)
                     if not input_valid:
-                        log.warn('id=%d-%d-%d-%s meta=%s gid_raw=%d: invalid input for %s: detail=%s' % (
-                           device_id, day, hour, sensor_name, device_meta, gid_raw, str(input_name), reason))
+                        # Only log warning once first time
+                        if not self.has_err_msg(device_id, reason):
+                            log.warn('id=%d-%d-%d-%s meta=%s gid_raw=%d: invalid input for %s: detail=%s' % (
+                               device_id, day, hour, sensor_name, device_meta, gid_raw, str(input_name), reason))
+                            self.add_err_msg(device_id, reason)
                         validate_errs += 1
                         continue
 
@@ -194,8 +210,12 @@ class Refiner:
 
                         # No 'point' proceeding without a location
                         if 'point' not in record:
-                            log.warn('id=%d-%d-%d-%s meta=%s gid_raw=%d: no GPS location' % (
-                               device_id, day, hour, sensor_name, device_meta, gid_raw))
+                            # Only log warning once first time
+                            reason = 'no GPS location'
+                            if not self.has_err_msg(device_id, reason):
+                                log.warn('id=%d-%d-%d-%s meta=%s gid_raw=%d: %s' % (
+                                   device_id, day, hour, sensor_name, device_meta, gid_raw, reason))
+                                self.add_err_msg(device_id, reason)
                             validate_errs += 1
                             continue
 
@@ -240,8 +260,10 @@ class Refiner:
                     value = sensor_def['converter'](value_raw, sensor_vals, sensor_def, self.device)
                     output_valid, reason = self.device.check_value(sensor_name, sensor_vals, value=value)
                     if not output_valid:
-                        log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
-                            device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
+                        if not self.has_err_msg(device_id, reason):
+                            log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
+                                device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
+                            self.add_err_msg(device_id, reason)
                         validate_errs += 1
                         continue
 
