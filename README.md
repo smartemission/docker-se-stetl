@@ -99,7 +99,7 @@ The convention is to use `stetl_` names for variable names in the [config files]
 For example `pg_database` within [last.cfg](config/last.cfg) becomes `stetl_pg_database` within
 a K8s or other Docker deployment.
 
-## ETL process: (Harvester) Last (Values)
+### ETL process: (Harvester) Last (Values)
 
 Config file: [last.cfg](config/last.cfg). 
 The following environment vars need to be set, either via `docker-compose` or Kubernetes.
@@ -116,7 +116,7 @@ The following environment vars need to be set, either via `docker-compose` or Ku
 |stetl_pg_schema_rt|
 |stetl_pg_schema_calibrated|
 
-## ETL process: Harvester Whale
+### ETL process: Harvester Whale
 
 Config file: [harvester_whale.cfg](config/harvester_whale.cfg). 
 The following environment vars need to be set, either via `docker-compose` or
@@ -135,7 +135,7 @@ Kubernetes.
 |stetl_max_proc_time_secs|
 |stetl_api_interval_secs|
 
-# ETL process: RIVM (SOS) Harvester
+### ETL process: RIVM (SOS) Harvester
 
 Config file: [harvester_rivm.cfg](config/harvester_rivm.cfg). 
 The following environment vars need to be set, either via `docker-compose` or
@@ -159,7 +159,7 @@ Kubernetes.
 |stetl_influx_se_writer|
 |stetl_influx_se_writer_password|
 
-## ETL process: InfluxDB Harvester
+### ETL process: InfluxDB Harvester
 
 Config file: [harvester_influx.cfg](config/harvester_influx.cfg). 
 The following environment vars need to be set, either via `docker-compose` or
@@ -179,7 +179,7 @@ Kubernetes.
 |stetl_pg_password|
 |stetl_pg_schema_raw|
 
-## ETL process: Refiner
+### ETL process: Refiner
 
 Config file: [refiner.cfg](config/refiner.cfg). 
 The following environment vars need to be set, either via `docker-compose` or
@@ -203,7 +203,7 @@ Kubernetes.
 |stetl_influx_se_writer|
 |stetl_influx_se_writer_password|
 
-## ETL process: STA Publisher
+### ETL process: STA Publisher
 
 Config file: [stapublisher.cfg](config/stapublisher.cfg). 
 The following environment vars need to be set, either via `docker-compose` or
@@ -223,7 +223,7 @@ Kubernetes.
 |stetl_sta_user|
 |stetl_sta_password|
 
-## ETL process: SOS Publisher
+### ETL process: SOS Publisher
 
 Config file: [sospublisher.cfg](config/sospublisher.cfg). 
 The following environment vars need to be set, either via `docker-compose` or
@@ -241,7 +241,7 @@ Kubernetes.
 |stetl_sos_port|
 |stetl_sos_path|
 
-## ETL process: Extractor
+### ETL process: Extractor
 
 Config file: [extractor.cfg](config/extractor.cfg). 
 The following environment vars need to be set, either via `docker-compose` or
