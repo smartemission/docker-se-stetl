@@ -167,7 +167,7 @@ Kubernetes.
 
 |Environment variable|
 |---|
-|stetl_influx_host|
+|stetl_influx_dc1_host|
 |stetl_influx_port|
 |stetl_influx_as_database|
 |stetl_influx_as_reader|
