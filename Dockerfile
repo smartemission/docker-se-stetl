@@ -1,4 +1,4 @@
-FROM geopython/stetl:latest
+FROM geopython/stetl:1.2-rc1
 
 # Use the standard Stetl Docker Image with some additional packages
 LABEL maintainer="Just van den Broecke <justb4@gmail.com>"
