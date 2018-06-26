@@ -164,8 +164,8 @@ class HarvesterInfluxDbInput(InfluxDbInput):
             device_id = measurement
             if self.meas_name_to_device_id:
                 if measurement not in self.meas_name_to_device_id:
-                    log.error('No device_id mapped for measurement (table) %s' % measurement)
-                    raise Exception
+                    log.warn('No device_id mapped for measurement (table) %s' % measurement)
+                    continue
 
                 device_id = self.meas_name_to_device_id[measurement]
 

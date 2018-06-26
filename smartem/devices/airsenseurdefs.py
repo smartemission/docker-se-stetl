@@ -2,16 +2,16 @@ from devicefuncs import *
 from airsenseurfuncs import *
 
 # All sensor definitions, both base sensors (AirSensEUR) and derived (virtual) sensors
-# Carbon_monoxide = c("co_a4","CO-B4", "CO_MF_200", "CO_MF_20", "CO/MF-200", "CO3E300","co_mf_200"),
-# Nitric_oxide = c("no_b4","no-b4_op1","NO-B4", "NO_C_25", "NO/C-25","NO3E100"))
+# Carbon_monoxide = c("co_a4","CO-B4", "CO_MF_200", "CO_MF_20", "COMF200", "CO3E300","co_mf_200"),
+# Nitric_oxide = c("no_b4","NOB4_P1_op1","NOB4_P1", "NO_C_25", "NO/C-25","NO3E100"))
 # Nitrogen_dioxide = c("no2_b43f","NO2-B43F", "NO2_C_20", "NO2/C-20", "NO23E50"),
-# Ozone = c("o3_a431","O3_M-5","O3/M-5", "O3-B4", "O33EF1","o3_m_5"),
+# Ozone = c("o3_a431","O3_M-5","O3_M5", "O3-B4", "O33EF1","o3_m_5"),
 
 # Names
 # Geonovum1 ASE
-# 'CO/MF-200', 'NO-B4', 'NO2-B43F' 'O3/M-5'
+# 'COMF200', 'NOB4_P1', 'NO2-B43F' 'O3_M5'
 # JustObjects1 ASE
-# 'CO/MF-200', 'NO-B4', 'NO2-B43F' 'O3/M-5'
+# 'COMF200', 'NOB4_P1', 'NO2-B43F' 'O3_M5'
 
 # References:
 # [1] "Evaluation of low-cost sensors for air pollution monitoring"
@@ -37,13 +37,13 @@ SENSOR_DEFS = {
     #         'min': 10,
     #         'max': 150000
     #     },
-    'CO/MF-200':
+    'COMF200':
         {
             'label': 'CORaw',
             'vendor': 'Membrapor',
             'meta': 'http://www.membrapor.ch/sheet/CO-MF-200.pdf',
             'unit': 'unknown',
-            'meta_id': 'CO/MF-200',
+            'meta_id': 'COMF200',
             'params': {
                 'v_ref': 2,
                 'v_ref_ad': 1
@@ -65,13 +65,13 @@ SENSOR_DEFS = {
     #         'min': 10,
     #         'max': 150000
     #     },
-    'NO-B4':
+    'NOB4_P1':
         {
             'label': 'NORaw',
             'vendor': 'AlphaSense',
-            'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2015/03/NO-B4.pdf',
+            'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2015/03/NOB4_P1.pdf',
             'unit': 'unknown',
-            'meta_id': 'NO-B4',
+            'meta_id': 'NOB4_P1',
             'params': {
                 'v_ref': 1.7,
                 'v_ref_ad': 1
@@ -93,13 +93,13 @@ SENSOR_DEFS = {
     #         'min': 10,
     #         'max': 150000
     #     },
-    'NO2-B43F':
+    'NO2B43F':
         {
             'label': 'NO2Raw',
             'vendor': 'AlphaSense',
             'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2017/07/NO2B43F.pdf',
             'unit': 'unknown',
-            'meta_id': 'NO2-B43F',
+            'meta_id': 'NO2B43F',
             'params': {
                 'v_ref': 1.7,
                 'v_ref_ad': 0.5
@@ -122,13 +122,13 @@ SENSOR_DEFS = {
     #         'min': 10,
     #         'max': 150000
     #     },
-    'O3/M-5':
+    'O3_M5':
         {
             'label': 'O3Raw',
             'vendor': 'Membrapor',
             'meta': 'http://www.diltronic.com/wordpress/wp-content/uploads/O3-M-5.pdf',
             'unit': 'unknown',
-            'meta_id': 'O3/M-5',
+            'meta_id': 'O3_M5',
             'params': {
                 'v_ref': 1.7,
                 'v_ref_ad': 0.5
@@ -200,8 +200,8 @@ SENSOR_DEFS = {
         {
             'label': 'CORaw',
             'unit': 'Millivolt',
-            # 'input': ['CO3E300', 'CO/MF-200'],
-            'input': ['CO/MF-200'],
+            # 'input': ['CO3E300', 'COMF200'],
+            'input': ['COMF200'],
             'min': 0,
             'max': 5000,
             'converter': bits2millivolt,
@@ -210,8 +210,8 @@ SENSOR_DEFS = {
         {
             'label': 'NORaw',
             'unit': 'Millivolt',
-            # 'input': ['NO3E100', 'NO-B4'],
-            'input': ['NO-B4'],
+            # 'input': ['NO3E100', 'NOB4_P1'],
+            'input': ['NOB4_P1'],
             'min': 0,
             'max': 5000,
             'converter': bits2millivolt,
@@ -221,7 +221,7 @@ SENSOR_DEFS = {
             'label': 'NO2Raw',
             'unit': 'Millivolt',
             # 'input': ['NO23E50', 'NO2-B43F'],
-            'input': ['NO2-B43F'],
+            'input': ['NO2B43F'],
             'min': 0,
             'max': 5000,
             'converter': bits2millivolt,
@@ -230,8 +230,8 @@ SENSOR_DEFS = {
         {
             'label': 'O3Raw',
             'unit': 'Millivolt',
-            # 'input': ['O33EF1', 'O3/M-5'],
-            'input': ['O3/M-5'],
+            # 'input': ['O33EF1', 'O3_M5'],
+            'input': ['O3_M5'],
             'min': 0,
             'max': 5000,
             'converter': bits2millivolt,
