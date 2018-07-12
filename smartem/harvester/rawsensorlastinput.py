@@ -65,6 +65,25 @@ class RawSensorLastInput(RawSensorAPIInput):
 
         return True
 
+    def read_from_url(self, url, parameters=None):
+        """
+        Read the data from the URL, override to catch Exception without exiting process.
+
+        :param url: the url to fetch
+        :param parameters: optional dict of query parameters
+        :return:
+        """
+        # log.info('Fetch data from URL: %s ...' % url)
+
+        try:
+            data = RawSensorAPIInput.read_from_url(self, url, parameters)
+        except Exception as e:
+            log.error('Error RawSensorAPIInput.read_from_url %s: e=%s, skip device...' % (url, str(e)))
+            data = None
+
+        # Everything is fine
+        return data
+
     # Convert observations to array of records, one for each designated (see self.outputs) output
     def format_data(self, data):
 
@@ -117,6 +136,10 @@ class RawSensorLastInput(RawSensorAPIInput):
         # PRIMARY KEY (gid)
         # );
 
+        # If something went wrong
+        if data is None:
+            return None
+        
         # Parse JSON from data string fetched by base method read()
         sensor_vals = self.parse_json_str(data)
         if 'id' not in sensor_vals:
