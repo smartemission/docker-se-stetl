@@ -168,6 +168,9 @@ class RawSensorLastInput(RawSensorAPIInput):
         # Unix timestamp to calculate "stale state (0/1)" i.e. if a station has been
         # active over the last N hours (now 2). We keep all last values but flag inactive stations.
         record['time'] = zulu_to_gmt(sensor_vals['time'])
+        if record['time'] is None:
+            return None
+
         utc_then = datetime.utcnow() - timedelta(hours=2)
         tstamp_sample = time.mktime(record['time'].timetuple())
         tstamp_then = time.mktime(utc_then.timetuple())
