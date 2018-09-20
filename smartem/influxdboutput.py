@@ -8,6 +8,8 @@
 
 import calendar
 import Geohash
+import requests
+import base64
 
 from stetl.outputs.httpoutput import HttpOutput
 from stetl.util import Util
@@ -245,6 +247,10 @@ class InfluxDbOutput(HttpOutput):
         # tags, fields and timestamp will be substituted when creating payload
         self.template_data_line = self.measurement + ',%s %s %d\n'
 
+        self.base_path = self.path
+        self.base_url = 'http://%s:%d%s' % (self.host, self.port, self.path)
+        self.http_session = requests.Session()
+
     def create_payload(self, packet):
         """
          Create the POST body (payload) as string using InfluxDB Line Protocol,
@@ -330,3 +336,57 @@ class InfluxDbOutput(HttpOutput):
         log.info("Created payload of %d characters" % len(payload))
 
         return payload
+
+    def post_to_url(self, payload):
+        self.req_nr += 1
+
+        headers = {
+            "Host": self.host,
+            "User-Agent": "Stetl InfluxDBOutput",
+            "Content-Type": self.content_type,
+            # "Accept", self.accept_type,
+            "Content-Length": "%d" % len(payload)
+        }
+
+        # basic auth: http://mozgovipc.blogspot.nl/2012/06/python-http-basic-authentication-with.html
+        # base64 encode the username and password
+        # write the Authorization header like: 'Basic base64encode(username + ':' + password)
+        # TODO use Requests Session
+        status_code = 0
+        status_msg = ''
+        response_text = ''
+        url = self.base_url + self.path
+
+        log.info('POST to URL: %s ...' % url)
+
+        try:
+            if self.user is not None:
+                r = self.http_session.post(url, data=payload, headers=headers, auth=(self.user, self.password))
+            else:
+                r = self.http_session.post(url, data=payload, headers=headers)
+
+            response_text = r.text
+            status_code = r.status_code
+            status_msg = str(r.status_code)
+            headers = r.headers
+        except Exception as e:
+            log.error('Error posting to URL %s: e=%s' % (url, str(e)))
+
+        log.info("Req nr %d - response status: code=%d msg=%s" % (self.req_nr, status_code, status_msg))
+
+        if status_code == 200:
+            pass
+        elif status_code == 204:
+            response_text = ''
+        else:
+            log.info("Response Headers: %s" % str(headers))
+            # log.info('Content: %s' % response_text)
+
+        return status_code, status_msg, response_text
+
+    # Called by HttpOutput base class after create_payload(), overridden
+    def post(self, packet, payload):
+
+        statuscode, statusmessage, res = self.post_to_url(payload)
+
+        return statuscode, statusmessage, res
