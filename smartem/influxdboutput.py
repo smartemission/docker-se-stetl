@@ -355,16 +355,16 @@ class InfluxDbOutput(HttpOutput):
         status_code = 0
         status_msg = ''
         response_text = ''
-        url = self.base_url + self.path
+        url = self.base_url
 
         log.info('POST to URL: %s ...' % url)
 
         try:
             if self.user is not None:
-                r = self.http_session.post(url, data=payload, headers=headers, auth=(self.user, self.password))
-            else:
-                r = self.http_session.post(url, data=payload, headers=headers)
+                auth = base64.encodestring('%s:%s' % (self.user, self.password)).replace('\n', '')
+                headers["Authorization"] = "Basic %s" % auth
 
+            r = self.http_session.post(url, data=payload, headers=headers)
             response_text = r.text
             status_code = r.status_code
             status_msg = str(r.status_code)
