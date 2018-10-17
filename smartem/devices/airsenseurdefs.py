@@ -13,6 +13,9 @@ from airsenseurfuncs import *
 # JustObjects1 ASE
 # 'COMF200', 'NOB4_P1', 'NO2-B43F' 'O3_M5'
 
+# ASENL Deploy - 2018
+# 'COA4', 'NOB4', 'NO2B43F' 'OX_A341'
+
 # References:
 # [1] "Evaluation of low-cost sensors for air pollution monitoring"
 # by Spinelle, L., Gerboles, M., Kotsev, A. and Signorini, M. (2017)
@@ -53,6 +56,22 @@ SENSOR_DEFS = {
             'min': 0,
             'max': 65535
         },
+    'COA4':
+        {
+            'label': 'CORaw',
+            'vendor': 'AlphaSense',
+            'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2017/01/COA4.pdf',
+            'unit': 'unknown',
+            'meta_id': 'COA4',
+            'params': {
+                'v_ref': 2,
+                'v_ref_ad': 1
+            },
+            'converter': convert_none,
+            'type': int,
+            'min': 0,
+            'max': 65535
+        },
     # 'NO3E100':
     #     {
     #         'label': 'NORaw',
@@ -72,6 +91,22 @@ SENSOR_DEFS = {
             'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2015/03/NOB4_P1.pdf',
             'unit': 'unknown',
             'meta_id': 'NOB4_P1',
+            'params': {
+                'v_ref': 1.7,
+                'v_ref_ad': 1
+            },
+            'converter': convert_none,
+            'type': int,
+            'min': 0,
+            'max': 65535
+        },
+    'NOB4':
+        {
+            'label': 'NORaw',
+            'vendor': 'AlphaSense',
+            'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2015/03/NO-B4.pdf',
+            'unit': 'unknown',
+            'meta_id': 'NOB4',
             'params': {
                 'v_ref': 1.7,
                 'v_ref_ad': 1
@@ -138,7 +173,25 @@ SENSOR_DEFS = {
             'min': 0,
             'max': 65535
         },
-    'Tempe':
+    'OX_A431':
+        {
+            'label': 'OX_A431',
+            'vendor': 'AlphaSense',
+            'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2017/03/OX-A431.pdf',
+            'unit': 'unknown',
+            'meta_id': 'OX_A431',
+            'params': {
+                'v_ref': 1.7,
+                'v_ref_ad': 0.5
+            },
+            'converter': convert_none,
+            'type': int,
+            'min': 0,
+            'max': 65535
+        },
+
+
+        'Tempe':
         {
             'label': 'Temperatuur',
             'unit': 'Celsius',
@@ -170,7 +223,7 @@ SENSOR_DEFS = {
             'converter': convert_none,
             'type': int,
             'min': -25,
-            'max': 60
+            'max': 70
         },
     'pressure':
         {
@@ -201,7 +254,7 @@ SENSOR_DEFS = {
             'label': 'CORaw',
             'unit': 'Millivolt',
             # 'input': ['CO3E300', 'COMF200'],
-            'input': ['COMF200'],
+            'input': ['COA4'],
             'min': 0,
             'max': 5000,
             'converter': bits2millivolt,
@@ -211,7 +264,7 @@ SENSOR_DEFS = {
             'label': 'NORaw',
             'unit': 'Millivolt',
             # 'input': ['NO3E100', 'NOB4_P1'],
-            'input': ['NOB4_P1'],
+            'input': ['NOB4'],
             'min': 0,
             'max': 5000,
             'converter': bits2millivolt,
@@ -231,7 +284,7 @@ SENSOR_DEFS = {
             'label': 'O3Raw',
             'unit': 'Millivolt',
             # 'input': ['O33EF1', 'O3_M5'],
-            'input': ['O3_M5'],
+            'input': ['OX_A431'],
             'min': 0,
             'max': 5000,
             'converter': bits2millivolt,
