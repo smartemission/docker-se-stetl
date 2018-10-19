@@ -271,8 +271,10 @@ class HarvesterInfluxDbInput(InfluxDbInput):
             # data = [data_first, data_last]
             # for i in range(0,4):
             #     data.append(data_o[i])
-
-            packet.data = self.format_data(measurement_info['device_id'], day, hour, data)
+            record = self.format_data(measurement_info['device_id'], day, hour, data)
+            packet.data = None
+            if record['complete']:
+                packet.data = record
 
         # Shift time an hour for this device
         current_ts_nanos = (current_ts_secs + 3600) * NANOS_FACTOR
