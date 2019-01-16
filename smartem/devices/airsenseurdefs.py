@@ -72,18 +72,6 @@ SENSOR_DEFS = {
             'min': 0,
             'max': 65535
         },
-    # 'NO3E100':
-    #     {
-    #         'label': 'NORaw',
-    #         'vendor': 'CityTech',
-    #         'meta': 'http://www.gassensor.ru/data/files/nitric_oxide/no3e100.pdf',
-    #         'unit': 'unknown',
-    #         'meta_id': 'NO3E100',
-    #         'converter': convert_none,
-    #         'type': int,
-    #         'min': 10,
-    #         'max': 150000
-    #     },
     'NOB4_P1':
         {
             'label': 'NORaw',
@@ -116,18 +104,6 @@ SENSOR_DEFS = {
             'min': 0,
             'max': 65535
         },
-    # 'NO23E50':
-    #     {
-    #         'label': 'NO2Raw',
-    #         'vendor': 'CityTech',
-    #         'meta': 'http://www.gassensor.ru',
-    #         'unit': 'unknown',
-    #         'meta_id': 'NO23E50',
-    #         'converter': convert_none,
-    #         'type': int,
-    #         'min': 10,
-    #         'max': 150000
-    #     },
     'NO2B43F':
         {
             'label': 'NO2Raw',
@@ -135,35 +111,6 @@ SENSOR_DEFS = {
             'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2017/07/NO2B43F.pdf',
             'unit': 'unknown',
             'meta_id': 'NO2B43F',
-            'params': {
-                'v_ref': 1.7,
-                'v_ref_ad': 0.5
-            },
-            'converter': convert_none,
-            'type': int,
-            'min': 0,
-            'max': 65535
-        },
-    # 'O33EF1':
-    #     {
-    #         'label': 'O3Raw',
-    #         'vendor': 'CityTech',
-    #         'meta': 'http://www.yousensing.com/UploadFiles/20081213232449907.pdf',
-    #         'desc': 'must be O3 3E1F',
-    #         'unit': 'unknown',
-    #         'meta_id': 'O33EF1',
-    #         'converter': convert_none,
-    #         'type': int,
-    #         'min': 10,
-    #         'max': 150000
-    #     },
-    'O3_M5':
-        {
-            'label': 'O3Raw',
-            'vendor': 'Membrapor',
-            'meta': 'http://www.diltronic.com/wordpress/wp-content/uploads/O3-M-5.pdf',
-            'unit': 'unknown',
-            'meta_id': 'O3_M5',
             'params': {
                 'v_ref': 1.7,
                 'v_ref_ad': 0.5
@@ -190,6 +137,22 @@ SENSOR_DEFS = {
             'max': 65535
         },
 
+    'O3_M5':
+        {
+            'label': 'O3Raw',
+            'vendor': 'Membrapor',
+            'meta': 'http://www.diltronic.com/wordpress/wp-content/uploads/O3-M-5.pdf',
+            'unit': 'unknown',
+            'meta_id': 'O3_M5',
+            'params': {
+                'v_ref': 1.7,
+                'v_ref_ad': 0.5
+            },
+            'converter': convert_none,
+            'type': int,
+            'min': 0,
+            'max': 65535
+        },
 
         'Tempe':
         {
