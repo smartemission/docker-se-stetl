@@ -26,36 +26,15 @@ from airsenseurfuncs import *
 # [2] https://www.samenmetenaanluchtkwaliteit.nl/sites/default/files/2017-12/Jan%20Vonk_AirSensEUR.pptx.pdf
 # Jan Vonk - RIVM
 
+# 17.01.2019 Michel Gerboles:
+#   name.sensor Sens.raw.unit  gas.sensor       RefAD        Ref         board.zero.set   GAIN   Rload
+# 1     COA4            nA     Carbon_monoxide  0.5006105    1.500611    1.1003053        7001     50
+# 3     NOB4            nA     Nitric_oxide     0.5006105    1.200244    0.8315018        7001     50
+# 2     NO2B43F         nA     Nitrogen_dioxide 0.5006105    1.700855    2.1507937        7001     50
+# 4     OX_A431         nA     Ozone            0.5006105    1.700855    2.1507937        7001     50
+
 # For now only support for AlphaSense (NO, NO2) and Membrapor (CO, O3) sensors.
 SENSOR_DEFS = {
-    # 'CO3E300':
-    #     {
-    #         'label': 'CORaw',
-    #         'vendor': 'CityTech',
-    #         'meta': 'https://www.thebigredguide.com/docs/fullspec/co3e300.pdf',
-    #         'unit': 'unknown',
-    #         'meta_id': 'CO3E300',
-    #         'converter': convert_none,
-    #         'type': int,
-    #         'min': 10,
-    #         'max': 150000
-    #     },
-    'COMF200':
-        {
-            'label': 'CORaw',
-            'vendor': 'Membrapor',
-            'meta': 'http://www.membrapor.ch/sheet/CO-MF-200.pdf',
-            'unit': 'unknown',
-            'meta_id': 'COMF200',
-            'params': {
-                'v_ref': 2,
-                'v_ref_ad': 1
-            },
-            'converter': convert_none,
-            'type': int,
-            'min': 0,
-            'max': 65535
-        },
     'COA4':
         {
             'label': 'CORaw',
@@ -64,24 +43,10 @@ SENSOR_DEFS = {
             'unit': 'unknown',
             'meta_id': 'COA4',
             'params': {
-                'v_ref': 2,
-                'v_ref_ad': 1
-            },
-            'converter': convert_none,
-            'type': int,
-            'min': 0,
-            'max': 65535
-        },
-    'NOB4_P1':
-        {
-            'label': 'NORaw',
-            'vendor': 'AlphaSense',
-            'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2015/03/NOB4_P1.pdf',
-            'unit': 'unknown',
-            'meta_id': 'NOB4_P1',
-            'params': {
-                'v_ref': 1.7,
-                'v_ref_ad': 1
+                'v_ref': 1.500611,
+                'v_ref_ad': 0.5006105,
+                'gain': 7001.0,
+                'r_load': 50.0,                
             },
             'converter': convert_none,
             'type': int,
@@ -96,8 +61,10 @@ SENSOR_DEFS = {
             'unit': 'unknown',
             'meta_id': 'NOB4',
             'params': {
-                'v_ref': 1.7,
-                'v_ref_ad': 1
+                'v_ref': 1.200244,
+                'v_ref_ad': 0.5006105,
+                'gain': 7001.0,
+                'r_load': 50.0,                
             },
             'converter': convert_none,
             'type': int,
@@ -112,8 +79,10 @@ SENSOR_DEFS = {
             'unit': 'unknown',
             'meta_id': 'NO2B43F',
             'params': {
-                'v_ref': 1.7,
-                'v_ref_ad': 0.5
+                'v_ref': 1.700855,
+                'v_ref_ad': 0.5006105,
+                'gain': 7001.0,
+                'r_load': 50.0,                
             },
             'converter': convert_none,
             'type': int,
@@ -128,25 +97,10 @@ SENSOR_DEFS = {
             'unit': 'unknown',
             'meta_id': 'OX_A431',
             'params': {
-                'v_ref': 1.7,
-                'v_ref_ad': 0.5
-            },
-            'converter': convert_none,
-            'type': int,
-            'min': 0,
-            'max': 65535
-        },
-
-    'O3_M5':
-        {
-            'label': 'O3Raw',
-            'vendor': 'Membrapor',
-            'meta': 'http://www.diltronic.com/wordpress/wp-content/uploads/O3-M-5.pdf',
-            'unit': 'unknown',
-            'meta_id': 'O3_M5',
-            'params': {
-                'v_ref': 1.7,
-                'v_ref_ad': 0.5
+                'v_ref': 1.700855,
+                'v_ref_ad': 0.5006105,
+                'gain': 7001.0,
+                'r_load': 50.0,                
             },
             'converter': convert_none,
             'type': int,
@@ -215,41 +169,100 @@ SENSOR_DEFS = {
     'coraw':
         {
             'label': 'CORaw',
-            'unit': 'Millivolt',
-            # 'input': ['CO3E300', 'COMF200'],
+            'unit': 'nanoAmpere',
             'input': ['COA4'],
             'min': 0,
             'max': 5000,
-            'converter': bits2millivolt,
+            'converter': rec_digital2nanoAmpere,
         },
     'noraw':
         {
             'label': 'NORaw',
-            'unit': 'Millivolt',
-            # 'input': ['NO3E100', 'NOB4_P1'],
+            'unit': 'nanoAmpere',
             'input': ['NOB4'],
             'min': 0,
             'max': 5000,
-            'converter': bits2millivolt,
+            'converter': rec_digital2nanoAmpere,
         },
     'no2raw':
         {
             'label': 'NO2Raw',
-            'unit': 'Millivolt',
-            # 'input': ['NO23E50', 'NO2-B43F'],
+            'unit': 'nanoAmpere',
             'input': ['NO2B43F'],
             'min': 0,
             'max': 5000,
-            'converter': bits2millivolt,
+            'converter': rec_digital2nanoAmpere,
         },
     'o3raw':
         {
             'label': 'O3Raw',
-            'unit': 'Millivolt',
-            # 'input': ['O33EF1', 'O3_M5'],
+            'unit': 'nanoAmpere',
             'input': ['OX_A431'],
             'min': 0,
             'max': 5000,
-            'converter': bits2millivolt,
+            'converter': rec_digital2nanoAmpere,
         }
 }
+
+# OBSOLETE
+# 'CO3E300':
+#     {
+#         'label': 'CORaw',
+#         'vendor': 'CityTech',
+#         'meta': 'https://www.thebigredguide.com/docs/fullspec/co3e300.pdf',
+#         'unit': 'unknown',
+#         'meta_id': 'CO3E300',
+#         'converter': convert_none,
+#         'type': int,
+#         'min': 10,
+#         'max': 150000
+#     },
+# 'COMF200':
+#     {
+#         'label': 'CORaw',
+#         'vendor': 'Membrapor',
+#         'meta': 'http://www.membrapor.ch/sheet/CO-MF-200.pdf',
+#         'unit': 'unknown',
+#         'meta_id': 'COMF200',
+#         'params': {
+#             'v_ref': 2,
+#             'v_ref_ad': 1
+#         },
+#         'converter': convert_none,
+#         'type': int,
+#         'min': 0,
+#         'max': 65535
+#     },
+
+# 'O3_M5':
+#     {
+#         'label': 'O3Raw',
+#         'vendor': 'Membrapor',
+#         'meta': 'http://www.diltronic.com/wordpress/wp-content/uploads/O3-M-5.pdf',
+#         'unit': 'unknown',
+#         'meta_id': 'O3_M5',
+#         'params': {
+#             'v_ref': 1.7,
+#             'v_ref_ad': 0.5
+#         },
+#         'converter': convert_none,
+#         'type': int,
+#         'min': 0,
+#         'max': 65535
+#     },
+# 'NOB4_P1':
+#     {
+#         'label': 'NORaw',
+#         'vendor': 'AlphaSense',
+#         'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2015/03/NOB4_P1.pdf',
+#         'unit': 'unknown',
+#         'meta_id': 'NOB4_P1',
+#         'params': {
+#             'v_ref': 1.7,
+#             'v_ref_ad': 1
+#         },
+#         'converter': convert_none,
+#         'type': int,
+#         'min': 0,
+#         'max': 65535
+#     },

@@ -14,11 +14,40 @@
 #
 
 TWO_POW_16 = 65536.0
+TEN_POW_9 = float(pow(10, 9))
 
 
 # Equation 1: [1] page 3
-# V = (Vref - RefAD) + DigitalReading * 2 *  RefAD / 2**16
-def bits2millivolt(value, record_in=None, sensor_def=None, device=None):
+# STEP 1 Digital to Voltage (V)
+# V = (Ref - RefAD) + (Digital+1) /2^16 x 2 x RefAD
+# STEP 2 Voltage (V) to Ampere (I) as Ri
+# I = 10^9 V/(Gain x Rload)
+def digital2nanoAmpere(value, device, sensor_name):
+    input_def = device.get_sensor_def(sensor_name)
+    params = input_def['params']
+
+    # STEP 1 Digital to Voltage (V)
+    # V = (Ref - RefAD) + (Digital+1) /2^16 x 2 x RefAD
+    Ref = params['v_ref']
+    RefAD = params['v_ref_ad']
+    Digital = value
+    V = (Ref - RefAD) + (Digital + 1) / TWO_POW_16 * 2.0 * RefAD
+    # V = 0.844020396835
+
+    # STEP 2 Voltage (V) to Ampere (I) as Ri
+    # I = 10^9 V/(Gain x Rload)
+    Gain = params['gain']
+    RLoad = params['r_load']
+    I = TEN_POW_9 * V / (Gain * RLoad)
+
+    return I
+
+# Equation 1: [1] page 3
+# STEP 1 Digital to Voltage (V)
+# V = (Ref - RefAD) + (Digital+1) /2^16 x 2 x RefAD
+# STEP 2 Voltage (V) to Ampere (I) as Ri
+# I = 10^9 V/(Gain x Rload)
+def rec_digital2nanoAmpere(value, record_in=None, sensor_def=None, device=None):
     """
     Convert (evaluated) bits value to millivolt according to Vref and RefAD ASE formulas.
 
@@ -34,10 +63,6 @@ def bits2millivolt(value, record_in=None, sensor_def=None, device=None):
     if sensor_name not in input_names:
         return None
 
-    input_def = device.get_sensor_def(sensor_name)
-    params = input_def['params']
-    v_ref = params['v_ref']
-    v_ref_ad = params['v_ref_ad']
+    return digital2nanoAmpere(value, device, sensor_name)
 
-    # V = (Vref - RefAD) + value * 2 *  RefAD / 2**16
-    return ((v_ref - v_ref_ad) + value * 2.0 * v_ref_ad / TWO_POW_16) * 1000.0
+
