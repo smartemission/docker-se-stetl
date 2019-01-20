@@ -59,6 +59,12 @@ class Device:
         log.error('No check_value defined for base class Device')
         return None
 
+    def get_last_value(self, device_id, name, val_dict):
+        return None
+
+    def set_last_value(self, device_id, name, value, val_dict):
+        pass
+
     # Get location as lon, lat
     def get_lon_lat(self, val_dict):
         return None, None

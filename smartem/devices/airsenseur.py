@@ -16,6 +16,7 @@ class AirSensEUR(Device):
     def __init__(self):
         Device.__init__(self, 'ase')
         self.config_dict = None
+        self.last_values = {}
 
     def init(self, config_dict):
 
@@ -68,13 +69,19 @@ class AirSensEUR(Device):
         if type(name) is list:
             for n in name:
                 val, n = self.get_raw_value(n, val_dict)
+                name = n
                 if val:
-                    name = n
                     break
         else:
             # name is single name
             if name == val_dict['name']:
                 val = val_dict['sampleEvaluatedVal']
+            elif name in SENSOR_DEFS:
+                sensor_def = self.get_sensor_def(name)
+                if 'converter' in sensor_def:
+                    value_raw, name_raw = self.get_raw_value(sensor_def['input'], val_dict)
+                    if value_raw:
+                        val = sensor_def['converter'](value_raw, val_dict, sensor_def, self)
 
         return val, name
 
@@ -128,3 +135,26 @@ class AirSensEUR(Device):
                 return None, None
 
         return lon, lat
+
+    def get_last_value(self, device_id, name, val_dict):
+        try:
+            # Best effort
+            # TODO check for timestamps (not too long ago)
+            return self.last_values[str(device_id)][name]
+        except:
+            pass
+        return None
+    def set_last_value(self, device_id, name, value, val_dict):
+        try:
+            # Best effort
+            device_id = str(device_id)
+            if device_id not in self.last_values:
+                self.last_values[device_id] = {}
+
+            if name not in self.last_values[device_id]:
+                self.last_values[device_id][name] = {}
+
+            self.last_values[device_id][name]['value'] = value
+            self.last_values[device_id][name]['time'] = val_dict['time']
+        finally:
+            pass

@@ -1,8 +1,8 @@
 # Calibration test ASE-NL devices
 import sys
 from airsenseur import AirSensEUR
-from airsenseurparms import ASE_PARMS
-from airsenseurdefs import digital2nanoAmpere
+from airsenseurfuncs import *
+from airsenseurdefs import digital2nano_ampere
 
 # Rs=a0+a1*NO2+a2*T
 # Rs - a0 - a2T = a1 * NO2
@@ -137,11 +137,14 @@ if __name__ == '__main__':
 
     # NO2 test
     Digital = 61860.0
-    RiNO2 = float(digital2nanoAmpere(Digital, ase, 'NO2B43F'))
+    RiNO2 = float(digital2nano_ampere(Digital, ase, 'NO2B43F'))
     print('NO2 nA=' + str(RiNO2))
+    no2umg3 = nano_ampere_no2_to_ugm3(RiNO2, 11820001)
+    print('NO2 ugm3=' + str(no2umg3))
 
     # NO test
     Digital = 9450.0
-    RiNO = float(digital2nanoAmpere(Digital, ase, 'NOB4'))
+    RiNO = float(digital2nano_ampere(Digital, ase, 'NOB4'))
     print('NO nA=' + str(RiNO))
-
+    noumg3 = nano_ampere_no_to_ugm3(RiNO, 11820001)
+    print('NO ugm3=' + str(noumg3))

@@ -270,6 +270,9 @@ class Refiner:
                         validate_errs += 1
                         continue
 
+                    # Some Devices need (last) values from other records where not all values are in same record
+                    self.device.set_last_value(device_id, sensor_name, value, sensor_vals)
+
                     # Finally calculate calibrated value and recalc  average
                     if value_avg is not None:
                         # Recalc avg

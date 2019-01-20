@@ -40,13 +40,13 @@ SENSOR_DEFS = {
             'label': 'CORaw',
             'vendor': 'AlphaSense',
             'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2017/01/COA4.pdf',
-            'unit': 'unknown',
+            'unit': 'digital',
             'meta_id': 'COA4',
             'params': {
                 'v_ref': 1.500611,
                 'v_ref_ad': 0.5006105,
                 'gain': 7001.0,
-                'r_load': 50.0,                
+                'r_load': 50.0,
             },
             'converter': convert_none,
             'type': int,
@@ -58,13 +58,13 @@ SENSOR_DEFS = {
             'label': 'NORaw',
             'vendor': 'AlphaSense',
             'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2015/03/NO-B4.pdf',
-            'unit': 'unknown',
+            'unit': 'digital',
             'meta_id': 'NOB4',
             'params': {
                 'v_ref': 1.200244,
                 'v_ref_ad': 0.5006105,
                 'gain': 7001.0,
-                'r_load': 50.0,                
+                'r_load': 50.0,
             },
             'converter': convert_none,
             'type': int,
@@ -76,13 +76,13 @@ SENSOR_DEFS = {
             'label': 'NO2Raw',
             'vendor': 'AlphaSense',
             'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2017/07/NO2B43F.pdf',
-            'unit': 'unknown',
+            'unit': 'digital',
             'meta_id': 'NO2B43F',
             'params': {
                 'v_ref': 1.700855,
                 'v_ref_ad': 0.5006105,
                 'gain': 7001.0,
-                'r_load': 50.0,                
+                'r_load': 50.0,
             },
             'converter': convert_none,
             'type': int,
@@ -94,13 +94,13 @@ SENSOR_DEFS = {
             'label': 'OX_A431',
             'vendor': 'AlphaSense',
             'meta': 'http://www.alphasense.com/WEB1213/wp-content/uploads/2017/03/OX-A431.pdf',
-            'unit': 'unknown',
+            'unit': 'digital',
             'meta_id': 'OX_A431',
             'params': {
                 'v_ref': 1.700855,
                 'v_ref_ad': 0.5006105,
                 'gain': 7001.0,
-                'r_load': 50.0,                
+                'r_load': 50.0,
             },
             'converter': convert_none,
             'type': int,
@@ -108,7 +108,7 @@ SENSOR_DEFS = {
             'max': 65535
         },
 
-        'Tempe':
+    'Tempe':
         {
             'label': 'Temperatuur',
             'unit': 'Celsius',
@@ -172,8 +172,8 @@ SENSOR_DEFS = {
             'unit': 'nanoAmpere',
             'input': ['COA4'],
             'min': 0,
-            'max': 5000,
-            'converter': rec_digital2nanoAmpere,
+            'max': 10000,
+            'converter': rec_digital2nano_ampere,
         },
     'noraw':
         {
@@ -181,8 +181,8 @@ SENSOR_DEFS = {
             'unit': 'nanoAmpere',
             'input': ['NOB4'],
             'min': 0,
-            'max': 5000,
-            'converter': rec_digital2nanoAmpere,
+            'max': 10000,
+            'converter': rec_digital2nano_ampere,
         },
     'no2raw':
         {
@@ -190,8 +190,8 @@ SENSOR_DEFS = {
             'unit': 'nanoAmpere',
             'input': ['NO2B43F'],
             'min': 0,
-            'max': 5000,
-            'converter': rec_digital2nanoAmpere,
+            'max': 10000,
+            'converter': rec_digital2nano_ampere,
         },
     'o3raw':
         {
@@ -199,9 +199,54 @@ SENSOR_DEFS = {
             'unit': 'nanoAmpere',
             'input': ['OX_A431'],
             'min': 0,
-            'max': 5000,
-            'converter': rec_digital2nanoAmpere,
+            'max': 10000,
+            'converter': rec_digital2nano_ampere,
+        },
+    'co':
+        {
+            'label': 'CO',
+            'unit': 'ug/m3',
+            'input': ['coraw'],
+            'meta_id': 'COA4',
+            'converter': rec_nano_ampere_co_to_ugm3,
+            'type': int,
+            'min': 0,
+            'max': 10000
+        },
+    'no':
+        {
+            'label': 'NO',
+            'unit': 'ug/m3',
+            'input': ['noraw'],
+            'meta_id': 'NOB4',
+            'converter': rec_nano_ampere_no_to_ugm3,
+            'type': int,
+            'min': 0,
+            'max': 200
+        },
+    'no2':
+        {
+            'label': 'NO2',
+            'unit': 'ug/m3',
+            'input': ['no2raw'],
+            'meta_id': 'NO2B43F',
+            'converter': rec_nano_ampere_no2_to_ugm3,
+            'type': int,
+            'min': 0,
+            'max': 200
+        },
+    'o3':
+        {
+            'label': 'O3',
+            'unit': 'ug/m3',
+            'input': ['o3raw'],
+            'meta_id': 'OX_A431',
+            'converter': rec_nano_ampere_o3_to_ugm3,
+            'type': int,
+            'min': 0,
+            'max': 1000
         }
+
 }
 
 # OBSOLETE
