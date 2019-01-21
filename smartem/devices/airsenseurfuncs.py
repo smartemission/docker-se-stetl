@@ -82,6 +82,8 @@ def nano_ampere_co_to_ugm3(device_id, Ri, RH):
         return None
 
     co = ((Ri - parms['a0'] - parms['a2'] * RH) / parms['a1'])
+    if co < 2:
+        return None
     return co
 
 
@@ -116,6 +118,8 @@ def nano_ampere_no_to_ugm3(device_id, Ri, T):
     if not parms:
         return None
     no = ((Ri - parms['a0'] - parms['a2'] * T - parms['a3'] * T * T) / parms['a1'])
+    if no < 2:
+        return None
     return no
 
 
@@ -150,7 +154,7 @@ def nano_ampere_no2_to_ugm3(device_id, nA, T):
         return None
 
     no2 = ((nA - parms['a0'] - parms['a2'] * T) / parms['a1'])
-    if no2 < 3:
+    if no2 < 2:
         return None
     return no2
 
@@ -185,6 +189,8 @@ def nano_ampere_o3_to_ugm3(device_id, Ri, T, no2):
     if not parms:
         return None
     o3 = ((Ri - parms['a0'] - parms['a2'] * no2 - parms['a3'] * T) / parms['a1'])
+    if o3 < 2:
+        return None
     return o3
 
 

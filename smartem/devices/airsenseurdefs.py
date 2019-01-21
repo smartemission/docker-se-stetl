@@ -222,7 +222,7 @@ SENSOR_DEFS = {
             'converter': rec_nano_ampere_no_to_ugm3,
             'type': int,
             'min': 0,
-            'max': 200
+            'max': 2000
         },
     'no2':
         {
