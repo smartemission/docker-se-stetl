@@ -233,7 +233,7 @@ SENSOR_DEFS = {
             'converter': rec_nano_ampere_no2_to_ugm3,
             'type': int,
             'min': 0,
-            'max': 200
+            'max': 250
         },
     'o3':
         {
@@ -244,9 +244,8 @@ SENSOR_DEFS = {
             'converter': rec_nano_ampere_o3_to_ugm3,
             'type': int,
             'min': 0,
-            'max': 1000
+            'max': 300
         }
-
 }
 
 # OBSOLETE
