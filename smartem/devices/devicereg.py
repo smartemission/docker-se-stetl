@@ -8,6 +8,7 @@
 import logging
 from josene import Josene
 from airsenseur import AirSensEUR
+from vanilla import Vanilla
 
 log = logging.getLogger('DeviceReg')
 
@@ -19,7 +20,8 @@ class DeviceReg:
 
     devices = {
         'jose': Josene(),
-        'ase': AirSensEUR()
+        'ase': AirSensEUR(),
+        'vanilla': Vanilla()
     }
 
     @staticmethod

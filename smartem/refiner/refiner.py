@@ -96,7 +96,10 @@ class Refiner:
             hour = record_in['hour']
 
         device_id = record_in['device_id']
-        device_meta = self.device.get_meta_id(record_in['device_version'])
+        if 'device_meta' in record_in:
+            device_meta = record_in['device_meta']
+        else:
+            device_meta = self.device.get_meta_id(record_in['device_version'])
 
         # ts_list (timeseries list) is an array of dict, each dict containing raw sensor values
         ts_list = record_in['data']['timeseries']
@@ -177,7 +180,9 @@ class Refiner:
                         if 'device_name' in record_in:
                             record['device_name'] = record_in['device_name']
 
-                        if 'unique_id' not in record_in:
+                        if 'unique_id' in record_in:
+                            record['unique_id'] = '%s-%s' % (str(record_in['unique_id']), sensor_name)
+                        else:
                             record['unique_id'] = '%d-%s' % (device_id, sensor_name)
 
                         if day > 0:
@@ -204,10 +209,13 @@ class Refiner:
                         record['sample_count'] = 0
 
                         # Point location TODO: average, but for now assume static
-                        lon, lat = self.device.get_lon_lat(sensor_vals)
-                        if lon and lat:
-                            # Both lat and lon are valid!
-                            record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
+                        if 'point' in record_in:
+                            record['point'] = record_in['point']
+                        else:
+                            lon, lat = self.device.get_lon_lat(sensor_vals)
+                            if lon and lat:
+                                # Both lat and lon are valid!
+                                record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
 
                         # No 'point' proceeding without a location
                         if 'point' not in record:
@@ -221,15 +229,18 @@ class Refiner:
                             continue
 
                         # GPS height. TODO use air pressure
-                        record['altitude'] = 0
-                        if 's_altimeter' in sensor_vals:
-                            altitude = sensor_defs['altitude']['converter'](sensor_vals['s_altimeter'])
-                            valid, reason = self.device.check_value('altitude', sensor_vals, value=altitude)
-                            if not valid:
-                                altitude = 0
+                        if 'altitude' in record_in:
+                            record['altitude'] = record_in['altitude']
+                        else:
+                            record['altitude'] = 0
+                            if 's_altimeter' in sensor_vals:
+                                altitude = sensor_defs['altitude']['converter'](sensor_vals['s_altimeter'])
+                                valid, reason = self.device.check_value('altitude', sensor_vals, value=altitude)
+                                if not valid:
+                                    altitude = 0
 
-                            # altitude valid!
-                            record['altitude'] = altitude
+                                # altitude valid!
+                                record['altitude'] = altitude
 
                     else:
                         # Record for sensor_name already exists: will add to average later

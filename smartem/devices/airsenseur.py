@@ -144,6 +144,7 @@ class AirSensEUR(Device):
         except:
             pass
         return None
+
     def set_last_value(self, device_id, name, value, val_dict):
         try:
             # Best effort

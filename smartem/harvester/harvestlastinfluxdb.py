@@ -175,7 +175,7 @@ class HarvesterLastInfluxDbInput(InfluxDbInput):
         # Time already as UTC string
         # e.g. u'2018-10-17T15:00:14.746Z'
         datetime_str = data[0]['time']
-        record['time']  = dateutil.parser.parse(datetime_str)
+        record['time'] = dateutil.parser.parse(datetime_str)
 
         # Add sensor values data
         record['data'] = {
