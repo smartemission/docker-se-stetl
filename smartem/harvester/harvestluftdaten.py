@@ -36,9 +36,6 @@ class HarvesterLuftdatenInput(LuftdatenInput):
 
     # Format all LTD sensor item object to record (overridden from HttpInput).
     def assemble(self, sensor_items):
-        d = datetime.utcfromtimestamp(self.current_time_secs())
-        day = int(d.strftime('%Y%m%d'))
-        hour = d.hour + 1
 
         device_records = dict()
         for sensor_item in sensor_items:
@@ -80,7 +77,15 @@ class HarvesterLuftdatenInput(LuftdatenInput):
                             record = dict()
                             device_id = sensor_record['device_id']
 
-                            # Timestamp of sample
+                            # Timestamp (GMT) of sample
+                            d = sensor_record['time']
+                            # d = datetime.utcfromtimestamp(self.current_time_secs())
+                            day = int(d.strftime('%Y%m%d'))
+                            hour = d.hour
+                            # Yesterday last hour (2300-0000)
+                            if hour == 0:
+                                hour = 24
+
                             record['device_id'] = device_id
                             record['device_type'] = self.device_type
                             record['unique_id'] = '%s-%s-%s' % (str(device_id), str(day), str(hour))

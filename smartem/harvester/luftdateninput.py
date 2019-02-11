@@ -175,9 +175,7 @@ class LuftdatenInput(HttpInput):
 
             # "2019-02-05 15:42:04" make Zulu '2019-02-05T15:42:04Z'
             timestamp = sensor_item['timestamp']
-            ts_parts = timestamp.split(' ')
-            timestamp_zulu = '%sT%sZ' % (ts_parts[0], ts_parts[1])
-            timestamp = zulu_to_gmt(timestamp_zulu)
+            timestamp = self.timestamp_to_gmt(timestamp)
             if not timestamp:
                 return None
 
@@ -266,6 +264,19 @@ class LuftdatenInput(HttpInput):
             raise e
 
         return json_obj
+
+    def timestamp_to_gmt(self, timestamp):
+        if not timestamp:
+            return None
+
+        ts_gmt = None
+        try:
+            ts_parts = timestamp.split(' ')
+            ts_zulu = '%sT%sZ' % (ts_parts[0], ts_parts[1])
+            ts_gmt = zulu_to_gmt(ts_zulu)
+        except Exception as e:
+            log.warn('Error timestamp_to_gmt id=%s e=%s' % (timestamp, str(e)))
+        return ts_gmt
 
     def next_entry(self, a_list):
         if len(a_list) == 0:
