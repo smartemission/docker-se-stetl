@@ -189,7 +189,11 @@ class LuftdatenInput(HttpInput):
             sensor_meta = '%s-%d' % (sensor_type_name, sensor_id)
             unique_id = '%s-%s' % (device_name, sensor_meta)
 
-            altitude = int(round(float(location['altitude'])))
+            altitude = 0
+            if 'altitude' in location:
+                altitude = int(round(float(location['altitude'])))
+
+            # We MUST have lat/lon, otherwise exception and skip.
             longitude = location['longitude']
             latitude = location['latitude']
             point = 'SRID=4326;POINT(%s %s)' % (longitude, latitude)

@@ -120,22 +120,6 @@ class AirSensEUR(Device):
 
         return True, '%s OK' % name
 
-    # Get location as lon, lat
-    def get_lon_lat(self, val_dict):
-        lon = None
-        lat = None
-        if 'longitude' in val_dict:
-            lon = val_dict['longitude']
-            if lon < -90.0 or lon > 90.0:
-                return None, None
-
-        if 'latitude' in val_dict:
-            lat = val_dict['latitude']
-            if lat < -180.0 or lat > 180.0:
-                return None, None
-
-        return lon, lat
-
     def get_last_value(self, device_id, name, val_dict):
         try:
             # Best effort

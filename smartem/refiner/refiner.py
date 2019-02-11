@@ -173,19 +173,8 @@ class Refiner:
                         record['device_meta'] = device_meta
                         record['sensor_meta'] = self.device.get_sensor_meta_id(sensor_name, sensor_vals)
 
-                        # Optional fields dependent on input record
-                        if 'value_stale' in record_in:
-                            record['value_stale'] = record_in['value_stale']
-
-                        if 'device_name' in record_in:
-                            record['device_name'] = record_in['device_name']
-
-                        if 'unique_id' in record_in:
-                            record['unique_id'] = '%s-%s' % (str(record_in['unique_id']), sensor_name)
-                        else:
-                            record['unique_id'] = '%d-%s' % (device_id, sensor_name)
-
                         if day > 0:
+                            # Refined timeseries table
                             record['day'] = day
                             record['hour'] = hour
 
@@ -201,7 +190,20 @@ class Refiner:
 
                             record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=pytz.utc)
                         else:
+                            # For "last" values table
+
+                            # Optional fields dependent on input record
+                            if 'value_stale' in record_in:
+                                record['value_stale'] = record_in['value_stale']
+
+                            if 'device_name' in record_in:
+                                record['device_name'] = record_in['device_name']
+                                
                             record['time'] = record_in['time']
+                            if 'unique_id' in record_in:
+                                record['unique_id'] = '%s-%s' % (str(record_in['unique_id']), sensor_name)
+                            else:
+                                record['unique_id'] = '%d-%s' % (device_id, sensor_name)
 
                         record['name'] = sensor_name
                         record['label'] = sensor_def['label']

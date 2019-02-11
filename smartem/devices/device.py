@@ -67,4 +67,16 @@ class Device:
 
     # Get location as lon, lat
     def get_lon_lat(self, val_dict):
-        return None, None
+        lon = None
+        lat = None
+        if 'longitude' in val_dict:
+            lon = float(val_dict['longitude'])
+            if lon < -90.0 or lon > 90.0:
+                return None, None
+
+        if 'latitude' in val_dict:
+            lat = float(val_dict['latitude'])
+            if lat < -180.0 or lat > 180.0:
+                return None, None
+
+        return lon, lat
