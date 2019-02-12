@@ -17,12 +17,23 @@ class LuftdatenInput(HttpInput):
 
     """
 
-    @Config(ptype=str, default='vanilla', required=True)
-    def device_type(self):
+    @Config(ptype=int, default=4931, required=False)
+    def project_id(self):
         """
-        The station/device type, e.g. 'ase' or plain vanilla.
+        The 4-digit project id. '4931' is luftdaten.
 
         Required: True
+
+        Default: 4931
+        """
+        pass
+
+    @Config(ptype=str, default='vanilla', required=False)
+    def device_type(self):
+        """
+        The station/device type, e.g. 'ase', 'luftdaten' or plain vanilla.
+
+        Required: False
 
         Default: vanilla
         """
@@ -168,7 +179,7 @@ class LuftdatenInput(HttpInput):
         # },
         record = dict()
         try:
-            # sensor item: 4 main entries:
+            # sensor item object has 4 main entries:
             location = sensor_item['location']
             sensor = sensor_item['sensor']
             sensordatavalues = sensor_item['sensordatavalues']
@@ -179,8 +190,9 @@ class LuftdatenInput(HttpInput):
             if not timestamp:
                 return None
 
+            # We take the location.id as unique station (LTD kit id).
             kit_id = str(location['id'])
-            device_id = int('4931%s' % kit_id)
+            device_id = int('%d%s' % (self.project_id, kit_id))
             device_name = 'LTD_%s' % kit_id
             sensor_type_name = sensor['sensor_type']['name']
             sensor_id = sensor['id']

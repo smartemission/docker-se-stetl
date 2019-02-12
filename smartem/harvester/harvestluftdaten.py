@@ -20,7 +20,8 @@ class HarvesterLuftdatenInput(LuftdatenInput):
     One sensor:
     http://api.luftdaten.info/v1/sensor/17008/
 
-    Last hour average all sensors (no bbox query possible):
+    Last hour average all sensors (no bbox query possible): is
+    used here:
     http://api.luftdaten.info/static/v2/data.1h.json
 
     """
@@ -48,7 +49,8 @@ class HarvesterLuftdatenInput(LuftdatenInput):
                     longitude = float(location['longitude'])
                     latitude = float(location['latitude'])
 
-                    if latitude > bbox[0] and longitude > bbox[1] and latitude < bbox[2] and longitude < bbox[3]:
+                    # Test if this device is in bbox
+                    if bbox[0] < latitude < bbox[2] and bbox[1] < longitude < bbox[3]:
 
                         sensor_record = self.sensor_item2record(sensor_item)
                         if not sensor_record:
@@ -58,38 +60,50 @@ class HarvesterLuftdatenInput(LuftdatenInput):
                         device_name = sensor_record['device_name']
 
                         if device_name not in device_records:
+                            # First occurrence of this station (kit)
+
                             log.info('Create new raw data record for device_name=%s' % device_name)
                             #
-                            # -- Map this to
-                            # CREATE TABLE smartem_raw.timeseries (
-                            #   gid serial,
-                            #   unique_id character varying (16),
-                            #   insert_time timestamp with time zone default current_timestamp,
-                            #   device_id integer,
-                            #   day integer,
-                            #   hour integer,
-                            #   data json,
-                            #   complete boolean default false,
-                            #   PRIMARY KEY (gid)
-                            # );
 
                             # Create record with JSON text blob with metadata
                             record = dict()
                             device_id = sensor_record['device_id']
 
                             # Timestamp (GMT) of sample
-                            d = sensor_record['time']
-                            # d = datetime.utcfromtimestamp(self.current_time_secs())
+                            # d = sensor_record['time']
+                            current_time_secs = self.current_time_secs()
+                            d = datetime.utcfromtimestamp(current_time_secs)
                             day = int(d.strftime('%Y%m%d'))
+
+                            # current hour is the previous hour for meas-averages
+                            # hour 1 is from 00:00 to 01:00, 2 from 00:01 to 02:00 etc
+                            # hour 23:00-00:00 is 24! See below.
                             hour = d.hour
-                            # Yesterday last hour (2300-0000)
+
+                            # Yesterday last hour (23:00-00:00), also shift date (day) back
                             if hour == 0:
+                                d = datetime.utcfromtimestamp(current_time_secs - 3600)
+                                day = int(d.strftime('%Y%m%d'))
                                 hour = 24
 
+                            # -- Map this to
+                            # CREATE TABLE smartem_raw.timeseries (
+                            #   gid serial,
+                            #   unique_id character varying not null,
+                            #   insert_time timestamp with time zone default current_timestamp,
+                            #   device_id integer not null,
+                            #   day integer not null,
+                            #   hour integer not null,
+                            #   data json,
+                            #   complete boolean default false,
+                            #   device_type character varying not null default 'jose',
+                            #   device_version character varying not null default '1',
+                            #   PRIMARY KEY (gid)
+                            # )
                             record['device_id'] = device_id
                             record['device_type'] = self.device_type
-                            record['unique_id'] = '%s-%s-%s' % (str(device_id), str(day), str(hour))
                             record['device_version'] = self.device_version
+                            record['unique_id'] = '%s-%s-%s' % (str(device_id), str(day), str(hour))
                             record['day'] = day
                             record['hour'] = hour
 
@@ -100,8 +114,14 @@ class HarvesterLuftdatenInput(LuftdatenInput):
                             for item in sensor_record['data']['timeseries']:
                                 if 'time' in item:
                                     del (item['time'])
+
+                                    # Need lat/long for every measurement!
                                     item['latitude'] = latitude
                                     item['longitude'] = longitude
+
+                                log.info('Start timeseries for device_name=%s meta_id=%s' % (device_name, item['meta_id']))
+
+                            # Start bulk data record, with all measurements of last hour
                             record['data'] = {
                                 'id': device_id,
                                 'date': day,
@@ -118,10 +138,10 @@ class HarvesterLuftdatenInput(LuftdatenInput):
                                     item['latitude'] = latitude
                                     item['longitude'] = longitude
 
+                                # Append to other timeseries already in record
                                 record['data']['timeseries'].append(item)
 
-                            log.info('Appending timeseries for device_name=%s' % device_name)
-
+                                log.info('Appended timeseries for device_name=%s meta_id=%s' % (device_name, item['meta_id']))
 
             except Exception as e:
                 log.warn('Error location_id=%s, err= %s' % (str(location_id), str(e)))

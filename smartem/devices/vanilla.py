@@ -16,8 +16,8 @@ log = logging.getLogger('VanillaDevice')
 
 class Vanilla(Device):
 
-    def __init__(self):
-        Device.__init__(self, 'vanilla')
+    def __init__(self, device_type='vanilla'):
+        Device.__init__(self, device_type)
         self.config_dict = None
         self.last_values = {}
 

@@ -15,13 +15,14 @@ log = logging.getLogger('DeviceReg')
 
 class DeviceReg:
     """
-    Device registry: map name to Device instance.
+    Device registry: map name (device type) to Device instance.
     """
 
     devices = {
         'jose': Josene(),
         'ase': AirSensEUR(),
-        'vanilla': Vanilla()
+        'vanilla': Vanilla(),
+        'luftdaten': Vanilla('luftdaten')
     }
 
     @staticmethod
