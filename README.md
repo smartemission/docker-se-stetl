@@ -2,8 +2,8 @@
 
 Sources for all ETL of the Smart Emission Platform. Originally this ETL was developed
 for the Smart Emission Project Nijmegen and the Intemo Josene Sensor Device (2015-2017). 
-As to accommodate other sensor devices like the [EU JRC AirSensEUR](http://www.airsenseur.org), the ETL-framework
-has been generalized (2018). 
+As to accommodate other sensor devices like the [EU JRC AirSensEUR](http://www.airsenseur.org), and [LuftDaten.info](https://luftdaten.info/) kits, the ETL-framework
+has been generalized (2018/2019). 
 
 Uses deployment-specific variables for databases, passwords etc (not stored in GitHub).
 
